@@ -10,6 +10,9 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v3
+
       - name: Baixar o arquivo ZIP
         run: |
           wget -O ZipHeadless_Project.zip https://github.com/GustavoBandeira1808/AppZip/raw/6dc8ea2e978b35d960143d517e0661a8b38910fd/ZipHeadless_Project.zip
