@@ -1,4 +1,4 @@
-name: Extrair ZIP e Atualizar Repositório
+name: Extrair ZIP na raiz
 
 on:
   workflow_dispatch:
@@ -10,22 +10,25 @@ jobs:
       contents: write
 
     steps:
+      # Faz o checkout do repositório
       - name: Checkout do repositório
         uses: actions/checkout@v3
 
-      - name: Baixar o arquivo ZIP
+      # Extrai o ZIP que já está na raiz
+      - name: Extrair o ZIP
         run: |
-          wget -O ZipHeadless_Project.zip https://github.com/GustavoBandeira1808/AppZip/raw/6dc8ea2e978b35d960143d517e0661a8b38910fd/ZipHeadless_Project.zip
+          if [ -f "ZipHeadless_Project.zip" ]; then
+            unzip -o ZipHeadless_Project.zip
+            echo "ZIP extraído com sucesso!"
+          else
+            echo "Arquivo ZipHeadless_Project.zip não encontrado na raiz."
+          fi
 
-      - name: Extrair o conteúdo do ZIP
-        run: |
-          unzip -o ZipHeadless_Project.zip
-          rm ZipHeadless_Project.zip
-
-      - name: Commitar e enviar as alterações
+      # Commit e push dos arquivos extraídos
+      - name: Commitar e enviar alterações
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add .
           git commit -m "Extrair conteúdo do ZIP"
-          git push
+          git push || echo "Nada para commitar"
