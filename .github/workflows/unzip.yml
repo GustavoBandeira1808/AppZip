@@ -1,0 +1,28 @@
+name: Extrair ZIP e Atualizar Repositório
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Baixar o arquivo ZIP
+        run: |
+          wget -O ZipHeadless_Project.zip https://github.com/GustavoBandeira1808/AppZip/raw/6dc8ea2e978b35d960143d517e0661a8b38910fd/ZipHeadless_Project.zip
+
+      - name: Extrair o conteúdo do ZIP
+        run: |
+          unzip -o ZipHeadless_Project.zip
+          rm ZipHeadless_Project.zip
+
+      - name: Commitar e enviar as alterações
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Extrair conteúdo do ZIP"
+          git push
